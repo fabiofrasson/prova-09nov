@@ -1,5 +1,6 @@
 package com.fabiofrasson.prova09nov.resources;
 
+import com.fabiofrasson.prova09nov.exceptions.ResourceNotFoundException;
 import com.fabiofrasson.prova09nov.models.Contact;
 import com.fabiofrasson.prova09nov.services.ContactService;
 import org.springframework.http.HttpStatus;
@@ -48,13 +49,19 @@ public class ContactResource {
 
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-    service.delete(id);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+    try {
+      service.delete(id);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+      throw new ResourceNotFoundException("Contact not found. Please try again.");
+    }
   }
 
-  @PutMapping
-  public ResponseEntity<Void> replace(@RequestBody @Valid Contact contact) {
-    service.replace(contact);
+  @PutMapping(path = "/{id}")
+  public ResponseEntity<Void> replace(
+      @PathVariable("id") Long id, @RequestBody @Valid Contact contact) {
+    service.replace(id, contact);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

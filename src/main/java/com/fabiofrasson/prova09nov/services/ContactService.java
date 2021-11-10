@@ -55,13 +55,17 @@ public class ContactService {
     repository.delete(findByIdOrThrowResourceNotFoundException(id));
   }
 
-  public void replace(Contact contact) {
-    Optional<Contact> searchedContact = repository.findContactByEmailIgnoreCase(contact.getEmail());
+  public void replace(Long id, Contact contact) {
+    try {
+      Contact searchedContact = repository.getById(id);
 
-    if (searchedContact.isEmpty()) {
+      searchedContact.setName(contact.getName());
+      searchedContact.setEmail(contact.getEmail());
+      searchedContact.setPhoneNumber(contact.getPhoneNumber());
+
+      repository.save(searchedContact);
+    } catch (ResourceNotFoundException resourceNotFoundException) {
       throw new ResourceNotFoundException("Contact not found. Please try again.");
-    } else {
-      repository.save(contact);
     }
   }
 }

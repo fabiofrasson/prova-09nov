@@ -55,6 +55,10 @@ public class ContactService {
     repository.delete(findByIdOrThrowResourceNotFoundException(id));
   }
 
+  public void deleteAll() {
+    repository.deleteAll();
+  }
+
   public void replace(Long id, Contact contact) {
     try {
       Contact searchedContact = repository.getById(id);

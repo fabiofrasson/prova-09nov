@@ -58,7 +58,13 @@ public class ContactResource {
     }
   }
 
-  @PutMapping(path = "/{id}")
+  @DeleteMapping
+  public ResponseEntity<Void> deleteAll() {
+    service.deleteAll();
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @PutMapping(path = "/id/{id}")
   public ResponseEntity<Void> replace(
       @PathVariable("id") Long id, @RequestBody @Valid Contact contact) {
     service.replace(id, contact);

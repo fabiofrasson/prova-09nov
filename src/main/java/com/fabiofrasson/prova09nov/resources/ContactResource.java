@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(
+    origins = {"*"},
+    maxAge = 3600,
+    allowCredentials = "false")
 @RequestMapping("/api/contacts")
 public class ContactResource {
 
@@ -32,14 +34,9 @@ public class ContactResource {
     return ResponseEntity.ok(service.findByIdOrThrowResourceNotFoundException(id));
   }
 
-  @GetMapping(path = "/email/{email}")
-  public ResponseEntity<Optional<Contact>> findByEmail(@PathVariable("email") String email) {
-    return ResponseEntity.ok(service.findByEmail(email));
-  }
-
-  @GetMapping(path = "/phone/{phone}")
-  public ResponseEntity<Optional<Contact>> findByPhone(@PathVariable("phone") String phone) {
-    return ResponseEntity.ok(service.findByPhoneNumber(phone));
+  @GetMapping(path = "/search")
+  public ResponseEntity<List<Contact>> findByName(@RequestParam String name) {
+    return ResponseEntity.ok(service.findByName(name));
   }
 
   @PostMapping
@@ -47,7 +44,7 @@ public class ContactResource {
     return new ResponseEntity<>(service.save(contact), HttpStatus.CREATED);
   }
 
-  @DeleteMapping(path = "/{id}")
+  @DeleteMapping(path = "/id/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
 
     try {

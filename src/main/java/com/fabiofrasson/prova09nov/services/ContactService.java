@@ -6,6 +6,7 @@ import com.fabiofrasson.prova09nov.models.Contact;
 import com.fabiofrasson.prova09nov.repositories.ContactRepository;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +30,8 @@ public class ContactService {
         .orElseThrow(() -> new ResourceNotFoundException("Resource already exists."));
   }
 
-  public Optional<Contact> findByEmail(String email) {
-    return repository.findContactByEmailIgnoreCase(email);
-  }
-
-  public Optional<Contact> findByPhoneNumber(String phoneNumber) {
-    return repository.findContactByPhoneNumber(phoneNumber);
+  public List<Contact> findByName(String name) {
+    return repository.findContactByNameContainingIgnoreCase(name);
   }
 
   @Transactional
